@@ -1,8 +1,8 @@
 name = "ardian Gymnastiar"
-umur = 20
+umur = 30
 
 if umur > 10:
     print("ketuaan bjir kurangi satu -1")
-    umur =- 1
+    umur =- 2
 else :
     print("wawww masii kicikk")
