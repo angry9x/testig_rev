@@ -1,0 +1,101 @@
+/* Parallax hero */
+#hero-bg { 
+    transition: transform 0.05s linear; 
+    will-change: transform; 
+}
+
+/* Floating badge */
+@keyframes float { 
+    0%,100% { transform: translateY(0); } 
+    50% { transform: translateY(-10px); } 
+}
+.float-badge { 
+    animation: float 3s ease-in-out infinite; 
+}
+
+/* Feature card hover */
+.feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: default;
+}
+.feature-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(40,108,0,0.12);
+}
+.feature-card:hover .icon-wrap {
+    transform: rotate(10deg) scale(1.1);
+    transition: transform 0.3s ease;
+}
+.icon-wrap { 
+    transition: transform 0.3s ease; 
+}
+
+/* Typing text */
+#typing-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#typing-text::after { 
+    content: '|'; 
+    animation: blink 0.7s step-end infinite; 
+}
+@keyframes blink { 
+    50% { opacity: 0; } 
+}
+
+/* Counter number */
+.counter-num { 
+    font-variant-numeric: tabular-nums; 
+}
+
+/* CTA section */
+.cta-section {
+    background: linear-gradient(135deg, #1c5200 0%, #286c00 50%, #3a8f00 100%);
+    position: relative;
+    overflow: hidden;
+}
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(254,206,75,0.08) 0%, transparent 60%);
+    animation: rotateBg 20s linear infinite;
+}
+@keyframes rotateBg { 
+    to { transform: rotate(360deg); } 
+}
+
+/* Hero CTA button */
+.hero-btn {
+    background: linear-gradient(135deg, #fbbf24, #fece4b);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(254,206,75,0.5);
+}
+.hero-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(254,206,75,0.7);
+}
+.hero-btn:active { 
+    transform: scale(0.97); 
+}
+
+/* Scroll indicator */
+@keyframes scrollDown { 
+    0%,100% { transform: translateY(0); opacity:1; } 
+    50% { transform: translateY(8px); opacity:0.4; } 
+}
+.scroll-indicator { 
+    animation: scrollDown 1.5s ease infinite; 
+}
+
+@media (max-width: 768px) {
+    #typing-text {
+        font-size: 1.8rem;
+        white-space: nowrap;
+    }
+}

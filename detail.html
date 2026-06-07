@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - Lanjar Mulia{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/detail.css') }}"/>
+{% endblock %}
+
+{% block content %}
+<main class="max-w-[1200px] mx-auto px-4 md:px-6 py-8 md:py-12 min-h-screen">
+
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-gray-400 mb-8 reveal">
+        <a href="{{ url_for('public.index') }}" class="hover:text-green-700 transition-colors">Home</a>
+        <span class="material-symbols-outlined text-sm">chevron_right</span>
+        <a href="{{ url_for('public.produk') }}" class="hover:text-green-700 transition-colors">Produk</a>
+        <span class="material-symbols-outlined text-sm">chevron_right</span>
+        <span class="text-gray-600 font-medium">{{ product.name }}</span>
+    </nav>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-start">
+        <!-- Image Section -->
+        <div class="md:sticky md:top-24 reveal-left">
+            <div class="relative w-full aspect-square rounded-3xl overflow-hidden shadow-xl bg-gray-100">
+                <img id="main-img"
+                     alt="{{ product.name }}"
+                     class="product-image w-full h-full object-cover"
+                     src="{{ product.image_url }}"
+                     onerror="this.src='/static/images/home.png'"/>
+                     onclick="openImgModal()"/>
+
+                <div class="absolute top-5 left-5 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm">
+                    <span class="material-symbols-outlined text-green-700 text-lg">eco</span>
+                    <span class="font-semibold text-sm text-green-700">{{ product.category_name }}</span>
+                </div>
+
+                <!-- Zoom hint -->
+                <div class="absolute bottom-4 right-4 bg-black/40 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">zoom_in</span> Klik untuk perbesar
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="flex flex-col space-y-6 reveal-right">
+            <!-- Name & Price -->
+            <div>
+                <span class="text-green-700 font-semibold text-sm tracking-widest uppercase">{{ product.category_name }}</span>
+                <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mt-2 mb-5">{{ product.name }}</h1>
+                <div class="price-pop inline-block bg-green-50 border border-green-200 px-5 py-3 rounded-2xl">
+                    <span class="text-4xl font-bold text-green-700">Rp {{ "{:,.0f}".format(product.price) }}</span>
+                    <span class="text-gray-500 text-base ml-2">
+                        {% if product.category_name == 'Whole Melon' %}/ buah
+                        {% elif product.category_name == 'Sliced' %}/ pack
+                        {% else %}/ paket{% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="bg-gray-50 rounded-2xl p-6">
+                <h3 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-green-700">description</span>
+                    Deskripsi Produk
+                </h3>
+                <p class="text-gray-600 leading-relaxed">{{ product.description }}</p>
+            </div>
+
+            <!-- Stock -->
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <span class="font-semibold text-gray-700 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-lg text-green-600">inventory_2</span>
+                        Stok Tersedia
+                    </span>
+                    <span class="font-bold {% if product.stock < 10 %}text-red-500{% else %}text-green-700{% endif %}">
+                        {{ product.stock }} {{ 'buah' if product.category_name == 'Whole Melon' else 'pack' }}
+                    </span>
+                </div>
+                <!-- Stock bar -->
+                <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div id="stock-bar" class="stock-bar-fill h-full rounded-full {% if product.stock < 10 %}bg-red-400{% elif product.stock < 30 %}bg-yellow-400{% else %}bg-green-500{% endif %}" style="width:0%"
+                         data-stock="{{ product.stock }}" data-max="100"></div>
+                </div>
+            </div>
+
+            {% if product.stock > 0 %}
+            <!-- Quantity -->
+            <div class="bg-white border border-gray-200 rounded-2xl p-5 {% if session.user_role == 'admin' %}hidden{% endif %}">
+                <div class="flex items-center justify-between">
+                    <span class="font-semibold text-gray-800">Kuantitas</span>
+                    <div class="flex items-center gap-4">
+                        <button onclick="changeQty(-1)" class="qty-btn text-gray-600">
+                            <span class="material-symbols-outlined text-xl">remove</span>
+                        </button>
+                        <span id="qty-value" class="text-3xl font-bold text-gray-900 w-12 text-center">1</span>
+                        <button onclick="changeQty(1)" class="qty-btn text-gray-600">
+                            <span class="material-symbols-outlined text-xl">add</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Subtotal -->
+                <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between text-sm">
+                    <span class="text-gray-500">Subtotal</span>
+                    <span id="subtotal" class="font-bold text-green-700 text-lg">Rp {{ "{:,.0f}".format(product.price) }}</span>
+                </div>
+            </div>
+
+            <!-- CTA Buttons -->
+            {% if session.user_role == 'admin' %}
+            <div class="bg-blue-50 border border-blue-200 text-blue-700 px-6 py-4 rounded-2xl text-center flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">admin_panel_settings</span>
+                <span>Admin tidak dapat menambahkan produk ke keranjang</span>
+            </div>
+            {% else %}
+            <div class="flex gap-3">
+                <button onclick="addToCart()"
+                        id="cart-btn"
+                        class="cart-btn flex-1 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-lg">
+                    <span class="material-symbols-outlined" id="cart-icon">shopping_cart</span>
+                    <span id="cart-btn-text">Tambah ke Keranjang</span>
+                </button>
+                <a href="{{ url_for('public.keranjang') }}"
+                   class="btn-press bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-5 py-4 rounded-2xl transition-all flex items-center gap-1">
+                    <span class="material-symbols-outlined">shopping_bag</span>
+                </a>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-2xl text-center flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">remove_shopping_cart</span>
+                <strong>Stok Habis</strong> — Produk sedang tidak tersedia
+            </div>
+            {% endif %}
+
+            <div class="grid grid-cols-2 gap-3">
+                <div class="trust-card bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-3 shadow-sm">
+                    <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-green-600">check_circle</span>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-900 text-sm">Garansi Segar</p>
+                        <p class="text-xs text-gray-400">100% Fresh</p>
+                    </div>
+                </div>
+                <div class="trust-card bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-3 shadow-sm">
+                    <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-blue-600">local_shipping</span>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-900 text-sm">Pengiriman Cepat</p>
+                        <p class="text-xs text-gray-400">Same Day</p>
+                    </div>
+                </div>
+                <div class="trust-card bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-3 shadow-sm">
+                    <div class="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-yellow-600">workspace_premium</span>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-900 text-sm">Premium Grade</p>
+                        <p class="text-xs text-gray-400">Pilihan terbaik</p>
+                    </div>
+                </div>
+                <div class="trust-card bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-3 shadow-sm">
+                    <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-green-600">support_agent</span>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-900 text-sm">Support 24/7</p>
+                        <p class="text-xs text-gray-400">Siap membantu</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Image Modal -->
+<div id="img-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-6" onclick="closeImgModal()">
+    <img id="modal-img" src="{{ product.image_url }}" class="max-w-full max-h-[90vh] rounded-2xl shadow-2xl object-contain"/>
+    <button class="absolute top-6 right-6 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full backdrop-blur-sm transition-colors">
+        <span class="material-symbols-outlined text-2xl">close</span>
+    </button>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    initProduct({
+        id: {{ product.id }},
+        name: "{{ product.name | replace('"', '\\"') }}",
+        price: {{ product.price }},
+        image: "{{ product.image_url }}",
+        stock: {{ product.stock }}
+    });
+</script>
+<!-- Script lainnya sudah di-load via base.html -->
+{% endblock %}

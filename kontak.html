@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Kontak - Lanjar Mulia{% endblock %}
+{% block content %}
+<main class="pt-20 pb-12 px-4 md:px-6 max-w-[1200px] mx-auto">
+    <div class="text-center mb-12">
+        <h1 class="text-5xl font-bold text-green-700 mb-4">Hubungi Kami</h1>
+        <p class="text-lg text-gray-600 max-w-5xl mx-auto">Punya pertanyaan seputar ketersediaan stok melon premium, pemesanan dalam jumlah besar, atau ingin menjadwalkan tur ke greenhouse kami? Tim Lanjar Mulia siap menyambut dan membantu Anda dengan senang hati.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+            <h2 class="text-2xl font-semibold text-green-700 mb-6">Informasi Kontak</h2>
+            <div class="space-y-6">
+                <div class="flex items-start gap-4">
+                    <div class="p-3 bg-green-100 text-green-700 rounded-lg">
+                        <span class="material-symbols-outlined text-3xl">location_on</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900 mb-1">Alamat Kebun</p>
+                        <p class="text-gray-600">Jl. Raya Purwodadi - Blora, Ledokan,<br/>Desa Ngaringan, Kec. Ngaringan,<br/>Jawa Tengah, Indonesia 58193</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <div class="p-3 bg-green-100 text-green-700 rounded-lg">
+                        <span class="material-symbols-outlined text-3xl">call</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900 mb-1">Telepon / WhatsApp</p>
+                        <p class="text-gray-600">+62 896 5355 7426</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <div class="p-3 bg-green-100 text-green-700 rounded-lg">
+                        <span class="material-symbols-outlined text-3xl">schedule</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900 mb-1">Jam Operasional</p>
+                        <p class="text-gray-600">Senin - Minggu: 08:00 - 17:00</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <a href="https://wa.me/6289653557426" target="_blank" 
+                   class="flex items-center justify-center gap-2 w-full bg-green-700 text-white font-semibold py-3 rounded-full hover:bg-green-800 transition-colors">
+                    <span class="material-symbols-outlined">chat</span>
+                    Chat via WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 h-[320px] md:h-[500px]">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3774.041157615599!2d111.18591937477159!3d-7.050380392951872!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e774d0068d8009f%3A0x9532e7741c213e1a!2sGreenHouse%20LANJAR%20MULIA!5e1!3m2!1sen!2sus!4v1780676821228!5m2!1sen!2sus"
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</main>
+{% endblock %}

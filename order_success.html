@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesanan Berhasil - Lanjar Mulia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-50 to-emerald-50 min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-2xl w-full">
+        <!-- Success Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center">
+            <!-- Success Icon -->
+            <div class="mb-6 flex justify-center">
+                <div class="bg-green-100 rounded-full p-6 inline-block">
+                    <span class="material-symbols-outlined text-green-600" style="font-size: 64px;">check_circle</span>
+                </div>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-3xl font-bold text-gray-900 mb-3">Pesanan Berhasil Dikonfirmasi!</h1>
+            <p class="text-gray-600 mb-8">Terima kasih telah berbelanja di Lanjar Mulia</p>
+
+            <!-- Order Info -->
+            <div class="bg-gray-50 rounded-xl p-6 mb-8 text-left">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Order ID</p>
+                        <p class="font-bold text-gray-900">#{{ order['id'] }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Total Pembayaran</p>
+                        <p class="font-bold text-green-600">Rp {{ "{:,.0f}".format(order['total_amount']) }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Status</p>
+                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
+                            Menunggu Verifikasi
+                        </span>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Metode Pembayaran</p>
+                        <p class="font-semibold text-gray-900">{{ order['payment_method'] }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Box -->
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-8 text-left">
+                <div class="flex gap-3">
+                    <span class="material-symbols-outlined text-blue-600 flex-shrink-0">info</span>
+                    <div>
+                        <p class="font-semibold text-blue-900 mb-2">Langkah Selanjutnya:</p>
+                        <ul class="text-sm text-blue-800 space-y-1">
+                            <li>✓ Bukti pembayaran Anda telah diterima</li>
+                            <li>✓ Tim kami akan memverifikasi pembayaran dalam 1x24 jam</li>
+                            <li>✓ Anda akan dihubungi melalui WhatsApp/Email setelah verifikasi</li>
+                            <li>✓ Pesanan akan diproses setelah pembayaran terverifikasi</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <a href="{{ url_for('public.index') }}" 
+                   class="bg-green-700 hover:bg-green-800 text-white font-semibold px-8 py-3 rounded-lg inline-flex items-center justify-center gap-2 transition-colors">
+                    <span class="material-symbols-outlined text-sm">home</span>
+                    Kembali ke Beranda
+                </a>
+                <a href="{{ url_for('public.produk') }}" 
+                   class="bg-white hover:bg-gray-50 border-2 border-gray-300 text-gray-700 font-semibold px-8 py-3 rounded-lg inline-flex items-center justify-center gap-2 transition-colors">
+                    <span class="material-symbols-outlined text-sm">shopping_bag</span>
+                    Belanja Lagi
+                </a>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <p class="text-sm text-gray-600 mb-3">Butuh bantuan? Hubungi kami:</p>
+                <a href="https://wa.me/6289653557426?text=Halo,%20saya%20butuh%20bantuan%20untuk%20Order%20%23{{ order['id'] }}" 
+                   target="_blank"
+                   class="inline-flex items-center gap-2 text-green-700 hover:text-green-800 font-semibold">
+                    <span class="material-symbols-outlined text-sm">chat</span>
+                    WhatsApp Customer Service
+                </a>
+            </div>
+        </div>
+
+        <!-- Security Note -->
+        <p class="text-center text-sm text-gray-500 mt-6">
+            <span class="material-symbols-outlined text-xs align-middle">lock</span>
+            Transaksi Anda aman dan terenkripsi
+        </p>
+    </div>
+
+    <script>
+        // Clear cart after successful order
+        localStorage.removeItem('cart');
+        
+        // Prevent back button to checkout
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+    </script>
+</body>
+</html>
