@@ -1,0 +1,99 @@
+/* Admin Panel Styles */
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Sidebar */
+#admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 256px;
+    z-index: 40;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+#admin-sidebar.open {
+    transform: translateX(0);
+}
+
+/* Allow sidebar to scroll on mobile so bottom buttons are reachable */
+@media (max-width: 1023px) {
+    #admin-sidebar {
+        overflow-y: auto;
+    }
+}
+
+/* Desktop: sidebar always visible */
+@media (min-width: 1024px) {
+    #admin-sidebar {
+        transform: translateX(0);
+        position: sticky;
+        overflow-y: auto;
+    }
+    #sidebar-overlay {
+        display: none !important;
+    }
+}
+
+/* Sidebar brand section - sticky at top */
+#admin-sidebar .sidebar-brand {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Sidebar footer - stays at bottom */
+#admin-sidebar .sidebar-footer {
+    margin-top: auto;
+    position: sticky;
+    bottom: 0;
+}
+
+/* Overlay */
+#sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 39;
+}
+
+#sidebar-overlay.show {
+    display: block;
+}
+
+/* Admin table horizontal scroll */
+.table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll table {
+    min-width: 600px;
+}
+
+/* Flash alert */
+.flash-alert {
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
